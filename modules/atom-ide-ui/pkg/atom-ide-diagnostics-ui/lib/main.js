@@ -210,6 +210,9 @@ class Activation {
       const disableLinter = () => {
         AtomLinter.disable();
       };
+      const disableDiagnostics = () => {
+        AtomLinter.disableDiagnostics();
+      };
 
       const pathToActiveTextEditorStream = getActiveEditorPaths();
 
@@ -240,6 +243,7 @@ class Activation {
           showTraces,
           onShowTracesChange: setShowTraces,
           disableLinter,
+          disableDiagnostics,
           onFilterByActiveTextEditorChange: setFilterByActiveTextEditor,
         }),
       );

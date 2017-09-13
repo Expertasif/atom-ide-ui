@@ -16,8 +16,8 @@ import type {DiagnosticMessage} from '../../../atom-ide-diagnostics/lib/types';
 import analytics from 'nuclide-commons-atom/analytics';
 import DiagnosticsTable from './DiagnosticsTable';
 import {Checkbox} from 'nuclide-commons-ui/Checkbox';
+import {Message} from 'nuclide-commons-ui/Message';
 import {Toolbar} from 'nuclide-commons-ui/Toolbar';
-import {ToolbarCenter} from 'nuclide-commons-ui/ToolbarCenter';
 import {ToolbarLeft} from 'nuclide-commons-ui/ToolbarLeft';
 import {ToolbarRight} from 'nuclide-commons-ui/ToolbarRight';
 import * as React from 'react';
@@ -30,6 +30,7 @@ export type Props = {
   onFilterByActiveTextEditorChange: (isChecked: boolean) => mixed,
   warnAboutLinter: boolean,
   disableLinter: () => mixed,
+  disableDiagnostics: () => mixed,
   showTraces: boolean,
   onShowTracesChange: (isChecked: boolean) => mixed,
 };
@@ -84,21 +85,18 @@ export default class DiagnosticsView extends React.Component<Props> {
     let linterWarning = null;
     if (this.props.warnAboutLinter) {
       linterWarning = (
-        <Toolbar>
-          <ToolbarCenter>
-            <span className="inline-block highlight-info">
-              diagnostics is not compatible with the linter package. We
-              recommend that you&nbsp;
-              <a onClick={this.props.disableLinter}>
-                disable the linter package
-              </a>
-              .&nbsp;
-              <a href="http://nuclide.io/docs/advanced-topics/linter-package-compatibility/">
-                Learn More
-              </a>.
-            </span>
-          </ToolbarCenter>
-        </Toolbar>
+        <Message type="info">
+          <div>
+            You have both <code>atom-ide-diagnostics</code> and{' '}
+            <code>linter</code> enabled. To avoid duplicate results, please
+            either{' '}
+            <a onClick={this.props.disableLinter}>
+              disable the linter package
+            </a>{' '}
+            or{' '}
+            <a onClick={this.props.disableDiagnostics}>disable diagnostics</a>.
+          </div>
+        </Message>
       );
     }
 

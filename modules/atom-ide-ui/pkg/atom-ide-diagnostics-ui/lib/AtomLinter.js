@@ -10,6 +10,7 @@
  * @format
  */
 
+import featureConfig from 'nuclide-commons-atom/feature-config';
 import {observableFromSubscribeFunction} from 'nuclide-commons/event';
 import {Observable} from 'rxjs';
 
@@ -33,4 +34,20 @@ export function observePackageIsEnabled(): Observable<boolean> {
 
 export function disable(): void {
   atom.packages.disablePackage(LINTER_PACKAGE);
+}
+
+const USE_DIAGNOSTICS_KEY = 'use.atom-ide-diagnostics-ui';
+
+export function disableDiagnostics(): void {
+  featureConfig.set(USE_DIAGNOSTICS_KEY, false);
+  const packageName = featureConfig.getPackageName();
+  atom.notifications.addInfo('Re-enabling Diagnostics', {
+    description:
+      'To re-enable diagnostics, please enable `atom-ide-diagnostics-ui` under the "Use" section in ' +
+      `\`${packageName}\` settings.` +
+      (packageName === 'nuclide'
+        ? '\n\nNote that Flow and Hack errors will not appear until you do so.'
+        : ''),
+    dismissable: true,
+  });
 }
